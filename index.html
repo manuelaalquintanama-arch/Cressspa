@@ -1,0 +1,401 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>Camisetas Personalizadas - Manuela Quintana</title>
+
+  <!-- TIPOGRAFÍA ELEGANTE -->
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600;800&display=swap" rel="stylesheet">
+
+  <style>
+    :root{
+      --negro: #0d0d0d;
+      --negro-suave: #1a1a1a;
+      --beige: #f3e9d7;
+      --beige-claro: #fff6e8;
+      --acento: #d6c9b6;
+      --texto: #ffffff;
+
+      --radius: 12px;
+      --trans: .25s ease;
+    }
+
+    *{box-sizing:border-box}
+
+    body{
+      margin:0;
+      font-family:'Montserrat', sans-serif;
+      background:var(--negro);
+      color:var(--texto);
+      padding-top:80px;
+    }
+
+    /* HEADER FIJO */
+    header{
+      position:fixed;
+      top:0; left:0; right:0;
+      background:var(--negro-suave);
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      padding:16px 28px;
+      box-shadow:0 4px 20px rgba(0,0,0,.6);
+      z-index:100;
+    }
+
+    header h1{
+      margin:0;
+      font-size:20px;
+      font-weight:800;
+      color:var(--beige);
+    }
+
+    #categoria{
+      padding:8px 14px;
+      background:var(--negro);
+      color:var(--beige);
+      border:1px solid var(--acento);
+      border-radius:8px;
+    }
+
+    /* GRID DE PRODUCTOS */
+    #productos{
+      display:grid;
+      grid-template-columns:repeat(auto-fill,minmax(240px,1fr));
+      gap:20px;
+      padding:20px;
+      max-width:1200px;
+      margin:auto;
+    }
+
+    .producto{
+      background:var(--beige);
+      color:black;
+      border-radius:var(--radius);
+      padding:15px;
+      border:1px solid var(--acento);
+      box-shadow:0 6px 20px rgba(0,0,0,.4);
+      transition:var(--trans);
+      cursor:pointer;
+    }
+
+    .producto:hover{
+      transform:translateY(-6px);
+      box-shadow:0 12px 30px rgba(0,0,0,.6);
+    }
+
+    .producto img{
+      width:100%;
+      height:280px;
+      object-fit:cover;
+      border-radius:var(--radius);
+    }
+
+    .producto h3{
+      margin:10px 0 5px;
+      font-weight:700;
+    }
+
+    .producto button{
+      background:black;
+      color:white;
+      border:none;
+      padding:10px;
+      width:100%;
+      border-radius:8px;
+      margin-top:6px;
+      transition:var(--trans);
+    }
+
+    .producto button:hover{
+      background:var(--negro-suave);
+    }
+
+    /* CARRITO */
+    .carrito{
+      background:var(--beige-claro);
+      color:black;
+      max-width:600px;
+      padding:22px;
+      border-radius:var(--radius);
+      margin:40px auto;
+      border:1px solid var(--acento);
+      box-shadow:0 6px 20px rgba(0,0,0,.5);
+    }
+
+    #lista-carrito li{
+      background:white;
+      padding:12px;
+      border-radius:var(--radius);
+      margin-bottom:10px;
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      font-weight:600;
+      color:black;
+    }
+
+    .qty{
+      display:flex;
+      gap:8px;
+      align-items:center;
+    }
+
+    .qty button{
+      background:black;
+      color:white;
+      padding:6px 10px;
+      border:none;
+      border-radius:6px;
+      cursor:pointer;
+    }
+
+    .remove{
+      background:#c62828;
+      color:white;
+      border:none;
+      padding:6px 10px;
+      border-radius:6px;
+      cursor:pointer;
+    }
+
+    /* BOTONES PRINCIPALES */
+    .vaciar, .finalizar{
+      padding:14px;
+      border:none;
+      width:48%;
+      border-radius:8px;
+      cursor:pointer;
+      font-size:15px;
+      font-weight:700;
+    }
+    .vaciar{
+      background:#c62828;
+      color:white;
+    }
+    .finalizar{
+      background:black;
+      color:white;
+    }
+
+    /* FOOTER */
+    footer{
+      margin-top:60px;
+      padding:30px;
+      text-align:center;
+      color:var(--beige);
+      font-size:14px;
+      opacity:.6;
+    }
+
+    @media(max-width:600px){
+      header h1{font-size:16px}
+      #productos{grid-template-columns:1fr 1fr}
+    }
+  </style>
+</head>
+
+<body>
+
+<!-- ========== HEADER ========== -->
+<header>
+  <h1>Camisetas Personalizadas</h1>
+
+  <select id="categoria">
+    <option value="todos">Todas</option>
+    <option value="Camisetas">Camisetas</option>
+  </select>
+</header>
+
+
+<!-- ========== GRID PRODUCTOS ========== -->
+<div id="productos"></div>
+
+
+<!-- ========== CARRITO ========== -->
+<div class="carrito">
+  <h2>🛒 Carrito</h2>
+  <p><strong>Artículos: <span id="cantidad-carrito">0</span></strong></p>
+
+  <ul id="lista-carrito"></ul>
+
+  <p>Subtotal: <strong id="subtotal-text">$0</strong></p>
+  <p>Descuento: <strong id="descuento-text">$0</strong></p>
+  <p>Impuestos: <strong id="impuestos-text">$0</strong></p>
+  <p style="font-size:19px;">Total: <strong id="total-text">$0</strong></p>
+
+  <div style="display:flex; gap:10px; margin-top:18px;">
+    <button id="btn-vaciar" class="vaciar">🧼 Vaciar</button>
+    <button id="btn-finalizar" class="finalizar">💳 Finalizar</button>
+  </div>
+
+  <div id="paypal-button-container" style="margin-top:20px; display:none;"></div>
+</div>
+
+
+<!-- ========== FOOTER ========== -->
+<footer>
+  © 2025 Manuela Quintana — Ecommerce de camisetas personalizadas ✨
+</footer>
+
+
+<!-- PAYPAL SANDBOX -->
+<script src="https://www.paypal.com/sdk/js?client-id=sb&currency=USD"></script>
+
+<script>
+/* =========================
+   CONFIGURACIÓN
+========================= */
+const MONEDA = "USD";
+const LOCALE = "es-US";
+const money = new Intl.NumberFormat(LOCALE,{style:"currency",currency:MONEDA});
+
+const productos = [
+  { id: 1, nombre: "Camp", precio: 25, categoria:"Camisetas", img:"https://i.etsystatic.com/53418022/r/il/8af8c2/6822428379/il_fullxfull.6822428379_4772.jpg" },
+  { id: 2, nombre: "Vintage", precio: 18, categoria:"Camisetas", img:"https://i.etsystatic.com/44214681/r/il/2d0bcb/6038870840/il_340x270.6038870840_r6a6.jpg" },
+  { id: 3, nombre: "Angel", precio: 30, categoria:"Camisetas", img:"https://i.ytimg.com/vi/fgZ3HKu-Zxc/maxresdefault.jpg" },
+  { id: 4, nombre: "Rihanna", precio: 18, categoria:"Camisetas", img:"https://i.etsystatic.com/30284868/r/il/215084/7087820010/il_300x300.7087820010_m30s.jpg" },
+  { id: 5, nombre: "Japan", precio: 22, categoria:"Camisetas", img:"https://i.etsystatic.com/39544439/r/il/ecc623/7133033661/il_340x270.7133033661_m20o.jpg" }
+];
+
+let carrito = new Map();
+
+const el = {
+  productos: document.getElementById("productos"),
+  categoria: document.getElementById("categoria"),
+  lista: document.getElementById("lista-carrito"),
+  cantidad: document.getElementById("cantidad-carrito"),
+  subtotal: document.getElementById("subtotal-text"),
+  descuento: document.getElementById("descuento-text"),
+  impuestos: document.getElementById("impuestos-text"),
+  total: document.getElementById("total-text"),
+  paypal: document.getElementById("paypal-button-container")
+};
+
+/* =========================
+   RENDER PRODUCTOS
+========================= */
+function renderProductos(lista){
+  el.productos.innerHTML="";
+  lista.forEach(p=>{
+    const card=document.createElement("div");
+    card.className="producto";
+    card.innerHTML=`
+      <img src="${p.img}">
+      <h3>${p.nombre}</h3>
+      <p><strong>${money.format(p.precio)}</strong></p>
+      <button data-add="${p.id}">Agregar</button>
+    `;
+    el.productos.appendChild(card);
+  });
+}
+
+function filtrar(){
+  const cat = el.categoria.value;
+  const lista = cat==="todos" ? productos : productos.filter(p=>p.categoria===cat);
+  renderProductos(lista);
+  localStorage.setItem("filtro",cat);
+}
+
+/* =========================
+   CARRITO
+========================= */
+function persist(){ localStorage.setItem("carrito",JSON.stringify([...carrito.entries()])); }
+function load(){ const d=localStorage.getItem("carrito"); if(d) carrito=new Map(JSON.parse(d)); }
+
+function totales(){
+  let subtotal=0, cant=0;
+  carrito.forEach(p=>{ subtotal+=p.precio*p.cantidad; cant+=p.cantidad });
+  return {subtotal,total:subtotal, cant};
+}
+
+function pintar(){
+  el.lista.innerHTML="";
+  carrito.forEach(p=>{
+    const li=document.createElement("li");
+    li.innerHTML=`
+      ${p.nombre} — ${money.format(p.precio)}
+      <div class="qty">
+        <button data-dec="${p.id}">-</button>
+        <span>${p.cantidad}</span>
+        <button data-inc="${p.id}">+</button>
+        <button class="remove" data-del="${p.id}">❌</button>
+      </div>
+    `;
+    el.lista.appendChild(li);
+  });
+
+  const t=totales();
+  el.cantidad.textContent=t.cant;
+  el.subtotal.textContent=money.format(t.subtotal);
+  el.total.textContent=money.format(t.total);
+
+  el.paypal.style.display = t.total > 0 ? "block" : "none";
+  renderPayPal(t.total);
+}
+
+function add(id){
+  const p = productos.find(x=>x.id===id);
+  const it = carrito.get(id);
+  if(it) it.cantidad++;
+  else carrito.set(id,{...p,cantidad:1});
+  persist(); pintar();
+}
+
+function dec(id){
+  const it = carrito.get(id);
+  if(!it) return;
+  it.cantidad--;
+  if(it.cantidad<=0) carrito.delete(id);
+  persist(); pintar();
+}
+
+function delItem(id){ carrito.delete(id); persist(); pintar(); }
+
+/* =========================
+   PAYPAL
+========================= */
+let paypalT = null;
+function renderPayPal(total){
+  if(!window.paypal) return;
+  if(total<=0){ el.paypal.innerHTML=""; return; }
+  if(paypalT===total) return;
+
+  paypalT=total;
+  el.paypal.innerHTML="";
+
+  paypal.Buttons({
+    createOrder:(d,a)=>a.order.create({purchase_units:[{amount:{value:total.toFixed(2)}}]}),
+    onApprove:(d,a)=>a.order.capture().then(()=>{
+      alert("¡Pago recibido! Gracias ♥");
+      carrito.clear(); persist(); pintar();
+    })
+  }).render("#paypal-button-container");
+}
+
+/* =========================
+   EVENTOS
+========================= */
+document.addEventListener("click",e=>{
+  if(e.target.dataset.add) add(+e.target.dataset.add);
+  if(e.target.dataset.inc) add(+e.target.dataset.inc);
+  if(e.target.dataset.dec) dec(+e.target.dataset.dec);
+  if(e.target.dataset.del) delItem(+e.target.dataset.del);
+});
+
+document.getElementById("btn-vaciar").onclick=()=>{ carrito.clear(); persist(); pintar(); }
+document.getElementById("btn-finalizar").onclick=()=>alert("Compra simulada realizada ✔️");
+
+/* =========================
+   INIT
+========================= */
+(function init(){
+  load();
+  filtrar();
+  pintar();
+})();
+</script>
+
+</body>
+</html>
